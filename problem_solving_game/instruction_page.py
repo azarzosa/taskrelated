@@ -1,17 +1,15 @@
 import tkinter as tk
+from game_page import GamePage
 
-class InstructionPage:
-    def __init__(self):
-        self.instruction_window = tk.Tk()
-        self.instruction_window.title('Instructions')
-        self.instruction_window.geometry("900x675")
-        self.instruction_window.configure(background='black')
 
-        # create canvas for window
-        self.background_canvas = tk.Canvas(self.instruction_window, width=900, height=675)
+class InstructionPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        # create canvas for frame
+        self.background_canvas = tk.Canvas(self, bg='black', width=900, height=675)
         self.background_canvas.pack(fill="both", expand=True)
-
-        #gui = InstructionPage()
 
         # displays background image for the entire page
         self.display_background_image()
@@ -21,8 +19,6 @@ class InstructionPage:
 
         # displays the start game button
         self.start_button()
-
-        self.instruction_window.mainloop()
 
 
     def display_background_image(self):
@@ -34,6 +30,10 @@ class InstructionPage:
         # keep a reference of the image object
         self.background_canvas.image = background_image
 
+    '''
+    def hide_frame(self):
+        self.instruction_frame.hide_frame()
+    '''
 
     def display_instructions(self):
         data = self.open_txt()
@@ -42,9 +42,13 @@ class InstructionPage:
 
 
     def start_button(self):
-        start_button = tk.Button(self.instruction_window, text='Start Game', bg='black', fg='#f2edcf', highlightbackground='#000000',
-                                 width=20, command=self.instruction_window.destroy)
+        command = lambda: [self.controller.show_frame(GamePage), self.hide_frame()]
+        start_button = tk.Button(self, text='Start Game', bg='black', fg='#f2edcf', width=20, command=command)
         button_window = self.background_canvas.create_window(500,550, anchor='nw', window=start_button)
+
+
+    def hide_frame(self):
+        self.pack_forget()
 
 
     def open_txt(self):

@@ -1,20 +1,25 @@
 import tkinter as tk
 from game_logic import Game
 
-class GamePage:
 
-    def __init__(self):
+class GamePage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+
         # initialize game object
         self.game = Game()
 
-        # create window
-        self.game_window = tk.Tk()
-        self.game_window.geometry("900x675")
-        self.game_window.title('Game')
-        self.text_box_background = tk.PhotoImage(file="images/bg_scroll-1.png")
+        # create game frame
+        self.game_frame = tk.Frame(self, width=900, height=675)
+        self.game_frame.pack()
 
-        # create canvas for window
-        self.background_canvas = tk.Canvas(self.game_window, width=900, height=675)
+        # images to be used
+        self.text_box_background = tk.PhotoImage(file="images/bg_scroll-1.png")
+        self.treasure_chest      = tk.PhotoImage(file='images/treasure_chest.png')
+        self.poison_trap         = tk.PhotoImage(file='images/poison_trap.png')
+
+        # create canvas for frame
+        self.background_canvas = tk.Canvas(self.game_frame, bg='black', width=900, height=675)
         self.background_canvas.pack(fill="both", expand=True)
 
         # canvas text boxes global variables used in order to clear
@@ -30,7 +35,6 @@ class GamePage:
         self.display_text()
         self.display_points()
         self.display_rounds()
-        self.game_window.mainloop()
 
 
     def left_button(self):
@@ -39,7 +43,7 @@ class GamePage:
         '''
 
         # creates the button widget
-        self.left_door_button = tk.Button(self.game_window, text='Left Door', bg='black', fg='#f2edcf', width=25, height=5, command=self.left_door_event)
+        self.left_door_button = tk.Button(self.game_frame, text='Left Door', bg='black', fg='#f2edcf', width=25, height=5, command=self.left_door_event)
 
         # adds button widget to a new window on the background canvas
         self.left_button_window = self.background_canvas.create_window(250, 500, anchor='nw', window=self.left_door_button)
@@ -51,7 +55,7 @@ class GamePage:
         '''
 
         # create button widget
-        self.right_door_button = tk.Button(self.game_window, text='Right Door', bg='black', fg='#f2edcf', width=25, height=5,
+        self.right_door_button = tk.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf', width=25, height=5,
                                       command=self.right_door_event)
 
         # add button widget to a new window on the background canvas
@@ -105,6 +109,7 @@ class GamePage:
 
 
     def display_rounds(self):
+        ''' Displays the  '''
         round_message = 'Current Round: {}'.format(self.game.get_rounds())
         self.rounds = self.background_canvas.create_text(700,10, text=round_message, fill='white', font=('Helvetica', 14), anchor='nw')
         rounds_box = self.background_canvas.create_rectangle(self.background_canvas.bbox(self.rounds), fill='black')
@@ -119,16 +124,15 @@ class GamePage:
         self.game.record_game()
 
         # clear canvas text and rounds
-        self.background_canvas.delete(self.text)
-        self.background_canvas.delete(self.rounds)
+        self.clear_all()
 
         # re-display rounds and scenario text
-        self.display_rounds()
-        self.display_text()
+        self.display_all()
 
         # check if game is over
         if self.game.get_rounds() == 50:
             self.game_over()
+        # check if the right door has been chosen 5 times
         elif self.game.get_right_count() == 5:
             self.right_door_button['state'] = 'disabled'
 
@@ -140,31 +144,48 @@ class GamePage:
         # record current game to csv file
         self.game.record_game()
 
-        # clear canvas text objects
-        self.background_canvas.delete(self.point_box)
-        self.background_canvas.delete(self.rounds)
-        self.background_canvas.delete(self.text)
+        # clear canvas
+        self.clear_all()
 
         # re-display new information
-        self.display_rounds()
-        self.display_points()
-        self.display_text()
+        self.display_all()
 
         # check if game is over
         if self.game.get_rounds() == 50:
             self.game_over()
+        # check if the right door has not been chosen 5 times
         if self.game.get_right_count() < 5:
             self.right_door_button['state'] = 'normal'
-
 
 
     def game_over(self):
 
         # clear canvas text and rounds
-        self.background_canvas.delete(self.text)
-        self.background_canvas.delete(self.right_button_window)
-        self.background_canvas.delete(self.left_button_window)
+        self.clear_all()
 
         # display new message
         message = '\n\t Thank you for participating\n\n\tTotal Points: {}'.format(self.game.get_total_points())
         self.display_text(message, 20)
+
+
+    def hide_frame(self):
+        self.pack_forget()
+
+
+    def clear_all(self):
+        # clear canvas text objects
+        self.background_canvas.delete(self.point_box)
+        self.background_canvas.delete(self.rounds)
+        self.background_canvas.delete(self.text)
+
+        # clear canvas buttons
+        self.background_canvas.delete(self.right_button_window)
+        self.background_canvas.delete(self.left_button_window)
+
+
+    def display_all(self):
+        self.display_rounds()
+        self.display_points()
+        self.display_text()
+        self.right_button()
+        self.left_button()
