@@ -1,4 +1,6 @@
 import tkinter as tk
+import tkmacosx as tkmac
+import platform
 from game_logic import Game
 
 
@@ -43,7 +45,11 @@ class GamePage(tk.Frame):
         '''
 
         # creates the button widget
-        self.left_door_button = tk.Button(self.game_frame, text='Left Door', bg='black', fg='#f2edcf', width=25, height=5, command=self.left_door_event)
+        if platform.system() == 'Darwin':
+            self.right_door_button = tkmac.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
+                                                width=25, height=5, command=self.right_door_event)
+        else:
+            self.left_door_button = tk.Button(self.game_frame, text='Left Door', bg='black', fg='#f2edcf', width=25, height=5, command=self.left_door_event)
 
         # adds button widget to a new window on the background canvas
         self.left_button_window = self.background_canvas.create_window(250, 500, anchor='nw', window=self.left_door_button)
@@ -55,8 +61,12 @@ class GamePage(tk.Frame):
         '''
 
         # create button widget
-        self.right_door_button = tk.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf', width=25, height=5,
-                                      command=self.right_door_event)
+        if platform.system() == 'Darwin':
+            self.right_door_button = tkmac.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
+                                               width=25, height=5, command=self.right_door_event)
+        else:
+            self.right_door_button = tk.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
+                                               width=25, height=5, command=self.right_door_event)
 
         # add button widget to a new window on the background canvas
         self.right_button_window = self.background_canvas.create_window(475, 500, anchor='nw', window=self.right_door_button)
@@ -117,6 +127,11 @@ class GamePage(tk.Frame):
 
 
     def right_door_event(self):
+        '''
+        right door button event calls the game instance to activate event.
+        Clears screen and re-displays with current info.
+        '''
+
         # activate the right door game event
         self.game.right_door_event()
 
@@ -138,6 +153,8 @@ class GamePage(tk.Frame):
 
 
     def left_door_event(self):
+        ''' Left door event calls game instance to activate event. Clears and re-displays screen with current info '''
+
         # activate the left door game event
         self.game.left_door_event()
 
@@ -159,6 +176,7 @@ class GamePage(tk.Frame):
 
 
     def game_over(self):
+        ''' When all rounds have been used, the buttons are disabled and total points are shown '''
 
         # clear canvas text and rounds
         self.clear_all()
@@ -169,10 +187,14 @@ class GamePage(tk.Frame):
 
 
     def hide_frame(self):
+        ''' hides self (frame) from the screen. Allows for transition through pages '''
+
         self.pack_forget()
 
 
     def clear_all(self):
+        ''' Clears all canvas objects from screen '''
+
         # clear canvas text objects
         self.background_canvas.delete(self.point_box)
         self.background_canvas.delete(self.rounds)
@@ -184,6 +206,8 @@ class GamePage(tk.Frame):
 
 
     def display_all(self):
+        ''' Displays all canvas objects on the screen '''
+
         self.display_rounds()
         self.display_points()
         self.display_text()

@@ -11,7 +11,7 @@ class Controller(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         # creating a container
-        container = tk.Frame(self)
+        container = tk.Frame(self, bg='black')
         container.pack(side="top", fill="both", expand=True)
 
         # initializing frames to an empty array
@@ -27,12 +27,13 @@ class Controller(tk.Tk):
             # for loop
             self.frames[F] = frame
 
-
+        # show instruction page first
         self.show_frame(InstructionPage)
 
-    # to display the current frame passed as
-    # parameter
+
     def show_frame(self, page):
+        ''' show current frame '''
+
         frame = self.frames[page]
         frame.pack()
 
