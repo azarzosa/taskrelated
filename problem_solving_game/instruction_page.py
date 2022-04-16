@@ -37,7 +37,10 @@ class InstructionPage(tk.Frame):
     def display_instructions(self):
         data = self.open_txt()
         # create text box for instructions on canvas
-        self.background_canvas.create_text(75, 100, text=data, font=('Helvetica', 14), anchor='nw')
+        if platform.system() == 'Darwin':
+            self.background_canvas.create_text(75, 100, text=data, font=('Helvetica', 20), anchor='nw', fill='black')
+        else:
+            self.background_canvas.create_text(75, 100, text=data, font=('Helvetica', 14), anchor='nw')
 
 
     def start_button(self):
@@ -47,9 +50,9 @@ class InstructionPage(tk.Frame):
         command = lambda: [self.controller.show_frame(GamePage), self.hide_frame()]
 
         if platform.system() == 'Darwin':
-            start_button = tkmac.Button(self, text='Start Game', bg='black', fg='#f2edcf', width=20, command=command)
+            start_button = tkmac.Button(self, text='Start Game', bg='black', fg='#f2edcf', width=150, command=command)
         else:
-            start_button = tk.Button(self, text='Start Game', bg='black', fg='#f2edcf', width=20, command=command)
+            start_button = tk.Button(self, text='Start Game', bg='black', fg='#f2edcf', width=25, command=command)
         button_window = self.background_canvas.create_window(500,550, anchor='nw', window=start_button)
 
 

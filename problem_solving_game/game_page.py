@@ -26,9 +26,10 @@ class GamePage(tk.Frame):
 
         # canvas text boxes global variables used in order to clear
         self.text = self.background_canvas.create_text(175, 100, text='', font=('Helvetica', 14), anchor='nw')
-        self.point_box = self.background_canvas.create_text(620, 10, text=self.game.get_total_points(), fill='white', font=('Helvetica', 14), anchor='nw')
-        self.rounds = self.background_canvas.create_text(750,10, text=self.game.get_rounds(), fill='white', font=('Helvetica', 14), anchor='nw')
-
+        self.point_box = self.background_canvas.create_text(620, 10, text=self.game.get_total_points(),
+                                                                fill='white', font=('Helvetica', 14), anchor='nw')
+        self.rounds = self.background_canvas.create_text(750, 10, text=self.game.get_rounds(), fill='white',
+                                                             font=('Helvetica', 14), anchor='nw')
         # call methods to display buttons, text and background images
         self.right_button()
         self.left_button()
@@ -46,8 +47,8 @@ class GamePage(tk.Frame):
 
         # creates the button widget
         if platform.system() == 'Darwin':
-            self.right_door_button = tkmac.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
-                                                width=25, height=5, command=self.right_door_event)
+            self.left_door_button = tkmac.Button(self.game_frame, text='Left Door', bg='black', fg='#f2edcf',
+                                                width=150, height=75, command=self.left_door_event)
         else:
             self.left_door_button = tk.Button(self.game_frame, text='Left Door', bg='black', fg='#f2edcf', width=25, height=5, command=self.left_door_event)
 
@@ -63,9 +64,9 @@ class GamePage(tk.Frame):
         # create button widget
         if platform.system() == 'Darwin':
             self.right_door_button = tkmac.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
-                                               width=25, height=5, command=self.right_door_event)
+                                               width=150, height=75, command=self.right_door_event)
         else:
-            self.right_door_button = tk.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
+            self.right_door_button = tk.Button(self.game_frame, text='Left Door', bg='black', fg='#f2edcf',
                                                width=25, height=5, command=self.right_door_event)
 
         # add button widget to a new window on the background canvas
@@ -100,20 +101,30 @@ class GamePage(tk.Frame):
                'that it does not contain a trap or treasure but another lever that \n' \
                'will lead you to another room with higher rewards. What do you do?'.format(self.game.get_current_percentage())
         message = data if message == None else message
-        self.text = self.background_canvas.create_text(175, 100, text=message, font=('Helvetica', font_size), anchor='nw')
+        if platform.system() == 'Darwin':
+            self.text = self.background_canvas.create_text(175, 100, text=message, font=('Helvetica', 18),
+                                                           anchor='nw', fill='black')
+        else:
+            self.text = self.background_canvas.create_text(175, 100, text=message, font=('Helvetica', font_size),
+                                                           anchor='nw')
 
 
     def display_text_box(self):
         ''' Creates a text box with a background image '''
 
-        text_box = self.background_canvas.create_image(125, 70, image=self.text_box_background, anchor='nw')
+        text_box = self.background_canvas.create_image(125, 50, image=self.text_box_background, anchor='nw')
 
 
     def display_points(self):
         ''' Displays the players current total points.  '''
 
         point_message = 'Points: {}'.format(self.game.get_total_points())
-        self.point_box = self.background_canvas.create_text(500,10, text=point_message, fill='white', font=('Helvetica', 14), anchor='nw')
+        if platform.system() == 'Darwin':
+            self.point_box = self.background_canvas.create_text(500,10, text=point_message, fill='white',
+                                                            font=('Helvetica', 20), anchor='nw')
+        else:
+            self.point_box = self.background_canvas.create_text(500, 10, text=point_message, fill='white',
+                                                            font=('Helvetica', 14), anchor='nw')
         point_bg_box = self.background_canvas.create_rectangle(self.background_canvas.bbox(self.point_box), fill='black')
         self.background_canvas.tag_lower(point_bg_box, self.point_box)
 
@@ -121,7 +132,12 @@ class GamePage(tk.Frame):
     def display_rounds(self):
         ''' Displays the  '''
         round_message = 'Current Round: {}'.format(self.game.get_rounds())
-        self.rounds = self.background_canvas.create_text(700,10, text=round_message, fill='white', font=('Helvetica', 14), anchor='nw')
+        if platform.system() == 'Darwin':
+            self.rounds = self.background_canvas.create_text(700,10, text=round_message, fill='white',
+                                                         font=('Helvetica', 20), anchor='nw')
+        else:
+            self.rounds = self.background_canvas.create_text(700, 10, text=round_message, fill='white',
+                                                             font=('Helvetica', 14), anchor='nw')
         rounds_box = self.background_canvas.create_rectangle(self.background_canvas.bbox(self.rounds), fill='black')
         self.background_canvas.tag_lower(rounds_box, self.rounds)
 
