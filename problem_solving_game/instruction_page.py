@@ -1,6 +1,5 @@
 import platform
 import tkinter as tk
-import tkmacosx as tkmac
 from game_page import GamePage
 
 

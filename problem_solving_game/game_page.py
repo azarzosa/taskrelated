@@ -1,5 +1,4 @@
 import tkinter as tk
-import tkmacosx as tkmac
 import platform
 from game_logic import Game
 
@@ -18,7 +17,7 @@ class GamePage(tk.Frame):
         # images to be used
         self.text_box_background = tk.PhotoImage(file="images/bg_scroll-1.png")
         self.treasure_chest      = tk.PhotoImage(file='images/treasure_chest.png')
-        self.poison_trap         = tk.PhotoImage(file='images/poison_trap.png')
+        self.poison_trap         = tk.PhotoImage(file='images/Poison_Trap.png')
 
         # create canvas for frame
         self.background_canvas = tk.Canvas(self.game_frame, bg='black', width=900, height=675)
