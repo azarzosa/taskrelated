@@ -66,7 +66,7 @@ class GamePage(tk.Frame):
             self.right_door_button = tkmac.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
                                                width=150, height=75, command=self.right_door_event)
         else:
-            self.right_door_button = tk.Button(self.game_frame, text='Left Door', bg='black', fg='#f2edcf',
+            self.right_door_button = tk.Button(self.game_frame, text='Right Door', bg='black', fg='#f2edcf',
                                                width=25, height=5, command=self.right_door_event)
 
         # add button widget to a new window on the background canvas
